@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Video Downloader</title>
+</head>
+<body>
+    <h1>YouTube Video Downloader</h1>
+    <form id="downloadForm">
+        <label for="url">YouTube URL:</label>
+        <input type="text" id="url" name="url" required>
+        <button type="submit">Get Download Links</button>
+    </form>
+
+    <div id="videoInfo">
+        <!-- 動画情報（タイトル、サムネイル）を表示 -->
+        <p id="videoTitle"></p>
+        <img id="thumbnail" src="" alt="Video Thumbnail" style="max-width: 300px;">
+    </div>
+
+    <div id="downloadLink"></div>
+
+    <script>
+        document.getElementById('downloadForm').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const url = document.getElementById('url').value;
+            const videoId = new URL(url).searchParams.get("v"); // URLからvideo-idを抽出
+
+            // API呼び出し
+            const response = await fetch(`/api/${videoId}`);
+            const data = await response.json();
+            
+            if (data.video_title && data.thumbnail_url) {
+                // 動画情報（タイトルとサムネイル）の表示
+                document.getElementById('videoTitle').innerText = `Title: ${data.video_title}`;
+                document.getElementById('thumbnail').src = data.thumbnail_url;
+
+                // ダウンロードリンクの表示
+                document.getElementById('downloadLink').innerHTML = `
+                    <p>Download MP3: <a href="${data.mp3_download_url}">Click here</a></p>
+                    <p>Download MP4: <a href="${data.mp4_download_url}">Click here</a></p>
+                `;
+            } else {
+                document.getElementById('downloadLink').innerHTML = 'Error: ' + data.error;
+            }
+        });
+    </script>
+</body>
+</html>
