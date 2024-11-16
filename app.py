@@ -1,6 +1,6 @@
 from flask import Flask
 from get_link import get_download_link  # Blueprintのインポート
-from download import download_mp3, download_mp4
+from download import download_mp3, download_mp4  # Blueprintのインポート
 from flask_cors import CORS
 
 app = Flask(__name__)
