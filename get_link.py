@@ -10,7 +10,7 @@ app = Flask(__name__)
 CORS(app)  # CORSを許可
 
 # YouTube Data APIのAPIキーを設定
-API_KEY = os.getenv("YOUTUBE_API_KEY")  # 環境変数からAPIキーを取得
+API_KEY = os.getenv('API_KEY')  # vercelの設定からAPIキーを取得
 
 # YouTube APIクライアントの作成
 youtube = build('youtube', 'v3', developerKey=API_KEY)
