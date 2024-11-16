@@ -1,4 +1,4 @@
-yt-dlp
-flask
-flask-cors
-google-api-python-client
+yt-dlp==2024.01.25
+Flask==2.2.3
+flask-cors==3.1.1
+google-api-python-client==2.88.0
