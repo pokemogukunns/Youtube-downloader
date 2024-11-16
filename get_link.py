@@ -1,13 +1,10 @@
 import os
-import random
-import string
-from googleapiclient.discovery import build
-from flask import Flask, jsonify
-from flask_cors import CORS
 import yt_dlp
+from googleapiclient.discovery import build
+from flask import Blueprint, jsonify
 
-app = Flask(__name__)
-CORS(app)  # CORSを許可
+# Blueprintを作成
+get_download_link = Blueprint('get_download_link', __name__)
 
 # YouTube Data APIのAPIキーを設定
 API_KEY = os.getenv('API_KEY')  # vercelの設定からAPIキーを取得
@@ -15,8 +12,8 @@ API_KEY = os.getenv('API_KEY')  # vercelの設定からAPIキーを取得
 # YouTube APIクライアントの作成
 youtube = build('youtube', 'v3', developerKey=API_KEY)
 
-@app.route('/api/<video_id>', methods=['GET'])
-def get_download_link(video_id):
+@get_download_link.route('/api/<video_id>', methods=['GET'])
+def get_video_info(video_id):
     try:
         # YouTube Data APIで動画情報を取得
         request = youtube.videos().list(part='snippet,contentDetails', id=video_id)
@@ -57,7 +54,3 @@ def get_download_link(video_id):
 
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-
-
-if __name__ == '__main__':
-    app.run(debug=True)
